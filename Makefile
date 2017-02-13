@@ -6,21 +6,19 @@
 #    By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/01/24 08:17:02 by cdrouet           #+#    #+#              #
-#    Updated: 2017/02/07 09:44:10 by cdrouet          ###   ########.fr        #
+#    Updated: 2017/02/13 14:22:00 by cdrouet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME= avm
-CC= clang++
+CC= gcc
 CFLAGS= -Wall -Werror -Wextra -stdlib=libc++ -std=c++0x
-SRC_NAME= main.cpp \
-		  Factory.class.cpp \
-		  AsmOperator.class.cpp \
-		  ExecFile.class.cpp \
-		  instruction.class.cpp
-SRC_PATH= ./sources/
-INC_PATH= ./includes/
-OBJ_NAME= $(SRC_NAME:.cpp=.o)
+SRC_NAME= malloc.c \
+					free.c \
+					realloc.c \
+SRC_PATH= ./
+INC_PATH= ./
+OBJ_NAME= $(SRC_NAME:.c=.o)
 OBJ_PATH= ./obj/
 SRC= $(addprefix $(SRC_PATH), $(SRC_NAME))
 OBJ= $(addprefix $(OBJ_PATH), $(OBJ_NAME))
@@ -29,9 +27,9 @@ OBJ= $(addprefix $(OBJ_PATH), $(OBJ_NAME))
 all: $(NAME)
 
 $(NAME): $(SRC) $(OBJ)
-	$(CC) $(CFLAGS)  -I$(INC_PATH) -o $(NAME) $(OBJ) -stdlib=libc++ -std=c++0x
+	$(CC) $(CFLAGS)  -I$(INC_PATH) -o $(NAME) $(OBJ)
 
-$(OBJ_PATH)%.o: $(SRC_PATH)%.cpp
+$(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	@mkdir $(OBJ_PATH) 2> /dev/null || echo "" > /dev/null
 	$(CC) -I$(INC_PATH) $(CFLAGS) -o $@ -c $<
 

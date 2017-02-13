@@ -6,7 +6,7 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/09 08:54:53 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/09 14:55:17 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/13 14:15:46 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,10 @@
 # include <sys/mman.h>
 # include <unistd.h>
 # include <sys/resource.h>
-# define TINY 4
-# define SMALL 128
+# include <errno.h>
 # define STRUCT_SIZE sizeof(struct s_allocated)
+# define TINY ((getpagesize() / 128) - STRUCT_SIZE)
+# define SMALL (((getpagesize() * 8) / 128) - STRUCT_SIZE)
 
 typedef struct			s_allocated
 {
@@ -36,5 +37,8 @@ typedef struct			s_all_alloc
 static t_all_alloc		g_all_alloc;
 
 void					*malloc(size_t size);
+void					free(void *ptr);
+void					*realloc(void *ptr, size_t size);
+t_allocated	            *search_ptr_lst(t_allocated *lst, void *ptr)
 
 #endif
