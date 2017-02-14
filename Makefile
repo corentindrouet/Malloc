@@ -6,18 +6,22 @@
 #    By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/01/24 08:17:02 by cdrouet           #+#    #+#              #
-#    Updated: 2017/02/13 14:22:00 by cdrouet          ###   ########.fr        #
+#    Updated: 2017/02/14 12:05:29 by cdrouet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME= avm
+ifeq ($(HOSTTYPE),)
+	HOSTTYPE := $(shell uname -m)_$(shell uname -s)
+endif
+
+NAME=libft_malloc_$(HOSTTYPE).so
 CC= gcc
-CFLAGS= -Wall -Werror -Wextra -stdlib=libc++ -std=c++0x
+CFLAGS= -Wall -Werror -Wextra
 SRC_NAME= malloc.c \
 					free.c \
-					realloc.c \
+					realloc.c
 SRC_PATH= ./
-INC_PATH= ./
+INC_PATH=./
 OBJ_NAME= $(SRC_NAME:.c=.o)
 OBJ_PATH= ./obj/
 SRC= $(addprefix $(SRC_PATH), $(SRC_NAME))
@@ -27,7 +31,8 @@ OBJ= $(addprefix $(OBJ_PATH), $(OBJ_NAME))
 all: $(NAME)
 
 $(NAME): $(SRC) $(OBJ)
-	$(CC) $(CFLAGS)  -I$(INC_PATH) -o $(NAME) $(OBJ)
+	gcc -shared -o $(NAME) $(OBJ)
+	ln -s $(NAME) libft_malloc.so
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 	@mkdir $(OBJ_PATH) 2> /dev/null || echo "" > /dev/null
@@ -40,7 +45,7 @@ clean:
 
 .PHONY: fclean
 fclean: clean
-	rm -fv $(NAME)
+	rm -fv $(NAME) libft_malloc.so
 
 .PHONY: re
 re: fclean all

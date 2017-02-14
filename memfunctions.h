@@ -6,7 +6,7 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/09 08:54:53 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/14 11:06:06 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/14 16:16:31 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ typedef struct			s_all_alloc
 	t_allocated			*tiny_lst;
 	t_allocated			*small_lst;
 	t_allocated			*large_lst;
+    void				*tiny;
+    void				*small;
 }						t_all_alloc;
 
 static t_all_alloc		g_all_alloc;
@@ -40,5 +42,6 @@ void					*malloc(size_t size);
 void					free(void *ptr);
 void					*realloc(void *ptr, size_t size);
 t_allocated				*search_ptr_lst(t_allocated *lst, void *ptr);
+void					show_alloc_mem();
 
 #endif

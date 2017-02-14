@@ -6,11 +6,35 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/13 12:30:48 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/14 11:06:20 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/14 15:46:40 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "memfunctions.h"
+#include <unistd.h>
+
+static void	ft_putnbr(int n)
+{
+	unsigned int	i;
+	char			c;
+
+	i = (unsigned int)n;
+	if (n < 0)
+	{
+		write(1, "-", 1);
+		i = -n;
+	}
+	if (i >= 10)
+	{
+		ft_putnbr(i / 10);
+		ft_putnbr(i % 10);
+	}
+	else
+	{
+		c = i + '0';
+		write(1, &c, 1);
+	}
+}
 
 static void	*enough_space(t_allocated *ptr, size_t size)
 {
@@ -22,9 +46,9 @@ static void	*not_enough_space(t_allocated *ptr, size_t size)
 {
 	char	*tmp;
 	char	*ptr_content;
-	int		i;
+	size_t	i;
 
-	ptr_content = (ptr + 1);
+	ptr_content = (char*)(ptr + 1);
 	tmp = malloc(size);
 	i = 0;
 	while (i < ptr->size && i < size)
@@ -37,15 +61,19 @@ static void	*not_enough_space(t_allocated *ptr, size_t size)
 
 static int	check_if_enough_space(t_allocated *ptr, size_t size)
 {
+	ft_putnbr(ptr->size);
+	write(1, "-", 1);
+	ft_putnbr(size);
+	write(1, "\n", 1);
 	if (ptr->size <= TINY && size > TINY)
-		return (false);
+		return (0);
 	else if (ptr->size <= SMALL && (size > SMALL || size <= TINY))
-		return (false);
+		return (0);
 	else if (ptr->size > SMALL && size <= SMALL)
-		return (false);
-	else if (ptr->next && (ptr->next - (ptr + 1)) < size)
-		return (false);
-	return (true);
+		return (0);
+	else if (ptr->next && (ptr->next - (ptr + 1)) < (long)size)
+		return (0);
+	return (1);
 }
 
 void		*realloc(void *ptr, size_t size)
@@ -54,14 +82,17 @@ void		*realloc(void *ptr, size_t size)
 	int			inc;
 	void		*struct_alloc;
 
+	write(1, "realloc\n", 8);
 	if (!ptr)
 		return (malloc(size));
-	struct_alloc = g_all_alloc;
+	struct_alloc = &g_all_alloc;
 	inc = 0;
 	while (inc < 3)
 	{
-		tmp = (t_allocated*)(struct_alloc + (sizeof(t_allocated*) * inc));
+		tmp = *((t_allocated**)(struct_alloc + (sizeof(t_allocated*) * inc)));
+	ft_putnbr(size);
 		tmp = search_ptr_lst(tmp, ptr);
+	ft_putnbr(size);
 		if (tmp)
 			break ;
 		inc++;
