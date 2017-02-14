@@ -6,7 +6,7 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/09 08:54:53 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/13 14:15:46 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/14 11:06:06 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,6 @@ static t_all_alloc		g_all_alloc;
 void					*malloc(size_t size);
 void					free(void *ptr);
 void					*realloc(void *ptr, size_t size);
-t_allocated	            *search_ptr_lst(t_allocated *lst, void *ptr)
+t_allocated				*search_ptr_lst(t_allocated *lst, void *ptr);
 
 #endif

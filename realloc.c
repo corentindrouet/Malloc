@@ -6,20 +6,56 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/13 12:30:48 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/13 14:20:47 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/14 11:06:20 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "memfunctions.h"
 
-void	*realloc(void *ptr, size_t size)
+static void	*enough_space(t_allocated *ptr, size_t size)
+{
+	ptr->size = size;
+	return (ptr + 1);
+}
+
+static void	*not_enough_space(t_allocated *ptr, size_t size)
+{
+	char	*tmp;
+	char	*ptr_content;
+	int		i;
+
+	ptr_content = (ptr + 1);
+	tmp = malloc(size);
+	i = 0;
+	while (i < ptr->size && i < size)
+	{
+		tmp[i] = ptr_content[i];
+		i++;
+	}
+	return (tmp);
+}
+
+static int	check_if_enough_space(t_allocated *ptr, size_t size)
+{
+	if (ptr->size <= TINY && size > TINY)
+		return (false);
+	else if (ptr->size <= SMALL && (size > SMALL || size <= TINY))
+		return (false);
+	else if (ptr->size > SMALL && size <= SMALL)
+		return (false);
+	else if (ptr->next && (ptr->next - (ptr + 1)) < size)
+		return (false);
+	return (true);
+}
+
+void		*realloc(void *ptr, size_t size)
 {
 	t_allocated	*tmp;
 	int			inc;
 	void		*struct_alloc;
 
 	if (!ptr)
-		return malloc(size);
+		return (malloc(size));
 	struct_alloc = g_all_alloc;
 	inc = 0;
 	while (inc < 3)
@@ -31,7 +67,8 @@ void	*realloc(void *ptr, size_t size)
 		inc++;
 	}
 	if (!tmp)
-		return NULL;
-	if (tmp->size >= size)
-		return tmp;
+		return (NULL);
+	if (check_if_enough_space(tmp, size))
+		return (enough_space(tmp, size));
+	return (not_enough_space(tmp, size));
 }

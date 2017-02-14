@@ -6,13 +6,13 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/13 09:26:22 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/13 14:18:23 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/14 11:05:16 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "memfunctions.h"
 
-t_allocated	        *search_ptr_lst(t_allocated *lst, void *ptr)
+t_allocated			*search_ptr_lst(t_allocated *lst, void *ptr)
 {
 	t_allocated	*tmp;
 
@@ -38,20 +38,20 @@ void				free(void *ptr)
 
 	if (!ptr)
 		return ;
-	struct_alloc = g_all_alloc;
+	struct_alloc = &g_all_alloc;
 	inc = 0;
 	while (inc < 3)
 	{
-		tmp = (t_allocated*)(struct_alloc + (sizeof(t_allocated*) * inc));
+		tmp = *((t_allocated**)(struct_alloc + (sizeof(t_allocated*) * inc)));
 		tmp = search_ptr_lst(tmp, ptr);
 		if (inc == 2 && tmp)
 			munmap((void*)(tmp + 1), tmp->size);
 		else if (tmp)
-        {
+		{
 			tmp->free = true;
-            break ;
-        }
-        inc++;
+			break ;
+		}
+		inc++;
 	}
 	return ;
 }
