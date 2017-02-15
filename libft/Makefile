@@ -6,7 +6,7 @@
 #    By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/01/04 13:04:33 by cdrouet           #+#    #+#              #
-#    Updated: 2016/02/08 15:21:39 by cdrouet          ###   ########.fr        #
+#    Updated: 2017/02/15 08:47:37 by cdrouet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -112,11 +112,16 @@ SRC = ft_printf.c \
 
 BIN = $(SRC:.c=.o)
 
+BIN_PATH=./
+SRC_PATH=./
+
 FLAG = -Wall -Wextra -Werror
 
-$(NAME) :
-	gcc $(FLAG) -c $(SRC) ;
+$(NAME) : $(BIN)
 	ar rc $(NAME) $(BIN) ; ranlib $(NAME)
+
+$(OBJ_PATH)%.o: $(SRC_PATH)%.c
+	gcc -I./ $(FLAG) -o $@ -c $<
 
 all : $(NAME)
 

@@ -6,35 +6,12 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/13 12:30:48 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/14 15:46:40 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/15 11:18:04 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "memfunctions.h"
 #include <unistd.h>
-
-static void	ft_putnbr(int n)
-{
-	unsigned int	i;
-	char			c;
-
-	i = (unsigned int)n;
-	if (n < 0)
-	{
-		write(1, "-", 1);
-		i = -n;
-	}
-	if (i >= 10)
-	{
-		ft_putnbr(i / 10);
-		ft_putnbr(i % 10);
-	}
-	else
-	{
-		c = i + '0';
-		write(1, &c, 1);
-	}
-}
 
 static void	*enough_space(t_allocated *ptr, size_t size)
 {
@@ -90,9 +67,7 @@ void		*realloc(void *ptr, size_t size)
 	while (inc < 3)
 	{
 		tmp = *((t_allocated**)(struct_alloc + (sizeof(t_allocated*) * inc)));
-	ft_putnbr(size);
 		tmp = search_ptr_lst(tmp, ptr);
-	ft_putnbr(size);
 		if (tmp)
 			break ;
 		inc++;

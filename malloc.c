@@ -6,12 +6,11 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/09 13:41:24 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/14 16:20:55 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/15 11:18:46 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "memfunctions.h"
-#include <unistd.h>
 
 static t_allocated	*new_t_allocated(size_t size, t_allocated *base, void *map,
 						size_t map_max_size)
@@ -29,7 +28,7 @@ static t_allocated	*new_t_allocated(size_t size, t_allocated *base, void *map,
 		if (tmp->free)
 		{
 			tmp->free = 0;
-			return (tmp + 1);
+			return (tmp);
 		}
 		if (((map + map_max_size) - (((void*)(tmp + 1)) + tmp->size)) <
 				(long)(map_max_size / 128))
@@ -59,7 +58,8 @@ static void			*tiny_function(size_t size)
 		g_all_alloc.tiny_lst = new_t_allocated(size, NULL,
 				g_all_alloc.tiny, (TINY + STRUCT_SIZE) * 128);
 		tmp = g_all_alloc.tiny_lst;
-	} else
+	}
+	else
 		tmp = new_t_allocated(size, g_all_alloc.tiny_lst,
 			g_all_alloc.tiny, (TINY + STRUCT_SIZE) * 128);
 	return (tmp + 1);
@@ -69,25 +69,25 @@ static void			*small_function(size_t size)
 {
 	t_allocated		*tmp;
 
-	write(1, "Small\n", 6);
 	tmp = NULL;
 	errno = 0;
-	if (!g_all_alloc.small) {
+	if (!g_all_alloc.small)
+	{
 		g_all_alloc.small = mmap(0, getpagesize() * 8, PROT_READ |
 				PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
-		write(1, "First time\n", 11);
 	}
 	if (errno)
 		return (NULL);
 	if (!g_all_alloc.small_lst)
 	{
-		write(1, "First time\n", 11);
 		g_all_alloc.small_lst = new_t_allocated(size, NULL,
 				g_all_alloc.small, (SMALL + STRUCT_SIZE) * 128);
 		tmp = g_all_alloc.small_lst;
-	} else
+	}
+	else
 		tmp = new_t_allocated(size, g_all_alloc.small_lst,
 			g_all_alloc.small, (SMALL + STRUCT_SIZE) * 128);
+	show_alloc_mem();
 	return (tmp + 1);
 }
 
@@ -114,6 +114,7 @@ static void			*large_function(size_t size)
 
 void				*malloc(size_t size)
 {
+	write(1, "my malloc\n", 10);
 	if (size <= TINY)
 		return (tiny_function(size));
 	else if (size <= SMALL)
