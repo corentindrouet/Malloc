@@ -6,7 +6,7 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/09 08:54:53 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/15 11:17:21 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/16 13:29:19 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,17 @@
 # include <errno.h>
 # include "libft.h"
 # define STRUCT_SIZE sizeof(struct s_allocated)
-# define TINY ((getpagesize() / 128) - STRUCT_SIZE)
-# define SMALL (((getpagesize() * 8) / 128) - STRUCT_SIZE)
+# define TINY 1024
+# define SMALL (1024 * 100)
 
 typedef struct			s_allocated
 {
 	size_t				size;
 	int					free;
+	size_t				page_total_size;
+	size_t				struct_page_total_size;
+	void				*alloc;
+	struct s_allocated	*previous;
 	struct s_allocated	*next;
 }						t_allocated;
 
@@ -33,8 +37,6 @@ typedef struct			s_all_alloc
 	t_allocated			*tiny_lst;
 	t_allocated			*small_lst;
 	t_allocated			*large_lst;
-	void				*tiny;
-	void				*small;
 }						t_all_alloc;
 
 t_all_alloc				g_all_alloc;
@@ -44,5 +46,7 @@ void					free(void *ptr);
 void					*realloc(void *ptr, size_t size);
 t_allocated				*search_ptr_lst(t_allocated *lst, void *ptr);
 void					show_alloc_mem();
+t_allocated				*struct_manager(t_allocated **lst, size_t size,
+							size_t map_max_size, short is_large);
 
 #endif

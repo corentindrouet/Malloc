@@ -6,7 +6,7 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/14 13:13:44 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/15 11:17:46 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/16 13:20:05 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void	show_alloc_mem(void)
 		while (tmp)
 		{
 			ft_putstr("start: ");
-			ft_putlnbr((long long)tmp);
+			ft_putlnbr((long long)tmp->alloc);
 			ft_putstr("  size: ");
 			ft_putnbr(tmp->size);
 			ft_putchar('\n');

@@ -6,7 +6,7 @@
 #    By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/01/24 08:17:02 by cdrouet           #+#    #+#              #
-#    Updated: 2017/02/15 09:36:51 by cdrouet          ###   ########.fr        #
+#    Updated: 2017/02/16 13:12:24 by cdrouet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,8 @@ CFLAGS= -Wall -Werror -Wextra
 SRC_NAME= malloc.c \
 					free.c \
 					realloc.c \
-					show_alloc_mem.c
+					show_alloc_mem.c \
+					lst_malloc.c
 SRC_PATH= ./
 INC_PATH=./
 LIBFT_INC=./libft/

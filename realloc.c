@@ -6,7 +6,7 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/13 12:30:48 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/15 11:18:04 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/16 13:53:02 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 static void	*enough_space(t_allocated *ptr, size_t size)
 {
 	ptr->size = size;
-	return (ptr + 1);
+	return (ptr->alloc);
 }
 
 static void	*not_enough_space(t_allocated *ptr, size_t size)
@@ -25,7 +25,7 @@ static void	*not_enough_space(t_allocated *ptr, size_t size)
 	char	*ptr_content;
 	size_t	i;
 
-	ptr_content = (char*)(ptr + 1);
+	ptr_content = (char*)(ptr->alloc);
 	tmp = malloc(size);
 	i = 0;
 	while (i < ptr->size && i < size)
@@ -33,6 +33,7 @@ static void	*not_enough_space(t_allocated *ptr, size_t size)
 		tmp[i] = ptr_content[i];
 		i++;
 	}
+	ptr->free = 1;
 	return (tmp);
 }
 
@@ -48,7 +49,7 @@ static int	check_if_enough_space(t_allocated *ptr, size_t size)
 		return (0);
 	else if (ptr->size > SMALL && size <= SMALL)
 		return (0);
-	else if (ptr->next && (ptr->next - (ptr + 1)) < (long)size)
+	else if (ptr->next && ptr->size < size)
 		return (0);
 	return (1);
 }
