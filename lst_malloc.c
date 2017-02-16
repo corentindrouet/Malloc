@@ -6,7 +6,7 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/16 09:19:33 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/16 14:05:40 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/16 15:06:45 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,11 @@ static void			*memory_address(t_allocated *lst, size_t map_max_size,
 		short is_large)
 {
 	if (is_large || ((lst->previous->page_total_size + lst->size) > map_max_size))
+	{
+		lst->page_total_size = lst->size;
 		return (mmap(0, map_max_size, PROT_READ | PROT_WRITE,
 					MAP_ANON | MAP_PRIVATE, -1, 0));
+	}
 	else
 		return (lst->previous->alloc + lst->previous->size);
 }

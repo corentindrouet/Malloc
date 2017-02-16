@@ -6,7 +6,7 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/13 09:26:22 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/16 13:43:59 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/16 15:06:30 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void				free(void *ptr)
 	int			inc;
 	void		*struct_alloc;
 
-	ft_putendl("FREE");
 	if (!ptr)
 		return ;
 	struct_alloc = &g_all_alloc;

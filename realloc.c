@@ -6,7 +6,7 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/13 12:30:48 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/16 13:53:02 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/16 15:47:22 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,21 +33,20 @@ static void	*not_enough_space(t_allocated *ptr, size_t size)
 		tmp[i] = ptr_content[i];
 		i++;
 	}
-	ptr->free = 1;
+	if (ptr->size > SMALL)
+		free(ptr->alloc);
+	else
+		ptr->free = 1;
 	return (tmp);
 }
 
 static int	check_if_enough_space(t_allocated *ptr, size_t size)
 {
-	ft_putnbr(ptr->size);
-	write(1, "-", 1);
-	ft_putnbr(size);
-	write(1, "\n", 1);
 	if (ptr->size <= TINY && size > TINY)
 		return (0);
 	else if (ptr->size <= SMALL && (size > SMALL || size <= TINY))
 		return (0);
-	else if (ptr->size > SMALL && size <= SMALL)
+	else if (ptr->size > SMALL)
 		return (0);
 	else if (ptr->next && ptr->size < size)
 		return (0);
@@ -60,7 +59,6 @@ void		*realloc(void *ptr, size_t size)
 	int			inc;
 	void		*struct_alloc;
 
-	write(1, "realloc\n", 8);
 	if (!ptr)
 		return (malloc(size));
 	struct_alloc = &g_all_alloc;

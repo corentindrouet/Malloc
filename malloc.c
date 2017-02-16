@@ -6,7 +6,7 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/09 13:41:24 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/16 13:29:08 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/16 15:08:43 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,6 @@ static void			*large_function(size_t size)
 
 void				*malloc(size_t size)
 {
-	write(1, "my malloc\n", 10);
-    show_alloc_mem();
-    write(1, "\n", 1);
 	if (size <= TINY)
 		return (tiny_function(size));
 	else if (size <= SMALL)

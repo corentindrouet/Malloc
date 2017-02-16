@@ -6,7 +6,7 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/09 08:54:53 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/16 13:29:19 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/16 15:49:51 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include <unistd.h>
 # include <sys/resource.h>
 # include <errno.h>
-# include "libft.h"
+# include "libft/libft.h"
 # define STRUCT_SIZE sizeof(struct s_allocated)
 # define TINY 1024
 # define SMALL (1024 * 100)
@@ -45,7 +45,7 @@ void					*malloc(size_t size);
 void					free(void *ptr);
 void					*realloc(void *ptr, size_t size);
 t_allocated				*search_ptr_lst(t_allocated *lst, void *ptr);
-void					show_alloc_mem();
+void					show_alloc_mem(void);
 t_allocated				*struct_manager(t_allocated **lst, size_t size,
 							size_t map_max_size, short is_large);
 
