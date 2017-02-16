@@ -6,7 +6,7 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/16 09:19:33 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/16 13:29:57 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/16 14:05:40 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ t_allocated			*struct_manager(t_allocated **lst, size_t size,
 	tmp->next->previous = tmp;
 	tmp = tmp->next;
 	tmp->size = size;
+	tmp->page_total_size = tmp->previous->page_total_size + size;
 	tmp->free = 0;
 	if (tmp->struct_page_total_size != STRUCT_SIZE)
 		tmp->struct_page_total_size =
