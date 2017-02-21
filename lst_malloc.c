@@ -6,27 +6,36 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/16 09:19:33 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/21 10:07:54 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/21 10:42:38 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-static t_allocated	*init_lst(size_t size, size_t map_max_size)
+static int			init_lst(t_allocated **lst, size_t size,
+		size_t map_max_size)
 {
 	t_allocated	*tmp;
 
-	tmp = mmap(0, getpagesize(), PROT_READ |
-			PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
-	tmp->size = size;
-	tmp->free = 0;
-	tmp->page_total_size = size;
-	tmp->struct_page_total_size = STRUCT_SIZE;
-	tmp->alloc = mmap(0, map_max_size, PROT_READ | PROT_WRITE,
-			MAP_ANON | MAP_PRIVATE, -1, 0);
-	tmp->next = NULL;
-	tmp->previous = NULL;
-	return (tmp);
+	errno = 0;
+	if (!(*lst))
+	{
+		tmp = mmap(0, getpagesize(), PROT_READ |
+				PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+		if (errno)
+			return (0);
+		tmp->size = size;
+		tmp->free = 0;
+		tmp->page_total_size = size;
+		tmp->struct_page_total_size = STRUCT_SIZE;
+		tmp->alloc = mmap(0, map_max_size, PROT_READ | PROT_WRITE,
+				MAP_ANON | MAP_PRIVATE, -1, 0);
+		tmp->next = NULL;
+		tmp->previous = NULL;
+		*lst = tmp;
+		return (1);
+	}
+	return (0);
 }
 
 static void			*memory_address(t_allocated *lst, size_t map_max_size,
@@ -43,21 +52,22 @@ static void			*memory_address(t_allocated *lst, size_t map_max_size,
 		return (lst->previous->alloc + lst->previous->size);
 }
 
-static void			check_struct_page_size(t_allocated *lst)
+static int			check_struct_page_size(t_allocated *lst)
 {
 	if ((int)(lst->struct_page_total_size + STRUCT_SIZE) > getpagesize())
 	{
 		lst->next = mmap(0, getpagesize(), PROT_READ | PROT_WRITE,
 				MAP_ANON | MAP_PRIVATE, -1, 0);
-        if (errno)
-            return ;
+		if (errno)
+			return (0);
 		lst->next->struct_page_total_size = STRUCT_SIZE;
 	}
 	else
 		lst->next = (lst + 1);
+	return (1);
 }
 
-int					check_for_free(t_allocated *lst, size_t size,
+static int			check_for_free(t_allocated *lst, size_t size,
 		short is_large)
 {
 	if (!lst->free)
@@ -83,22 +93,17 @@ t_allocated			*struct_manager(t_allocated **lst, size_t size,
 {
 	t_allocated	*tmp;
 
-    errno = 0;
 	tmp = *lst;
-	if (!tmp)
-	{
-		*lst = init_lst(size, map_max_size);
-        if (errno)
-            return (NULL);
+	if (init_lst(lst, size, map_max_size))
 		return (*lst);
-	}
+	if (errno)
+		return (NULL);
 	while (tmp->next && (!tmp->free || tmp->size < size))
 		tmp = tmp->next;
 	if (check_for_free(tmp, size, is_large))
 		return (tmp);
-	check_struct_page_size(tmp);
-    if (errno)
-        return (NULL);
+	if (!check_struct_page_size(tmp))
+		return (NULL);
 	tmp->next->previous = tmp;
 	tmp = tmp->next;
 	tmp->size = size;
@@ -108,7 +113,7 @@ t_allocated			*struct_manager(t_allocated **lst, size_t size,
 		tmp->struct_page_total_size =
 			tmp->previous->struct_page_total_size + STRUCT_SIZE;
 	tmp->alloc = memory_address(tmp, map_max_size, is_large);
-    if (errno)
-        return (NULL);
+	if (errno)
+		return (NULL);
 	return (tmp);
 }
