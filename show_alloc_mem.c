@@ -6,7 +6,7 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/14 13:13:44 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/21 09:09:08 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/21 09:29:51 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	show_alloc_mem(void)
 				ft_putstr(str_tmp);
 				free(str_tmp);
 				ft_putstr(" - ");
-				str_tmp = ft_ltoa_base((long)(tmp->alloc + tmp->size), 16);
+				str_tmp = ft_ltoa_base((long)(tmp->alloc + (tmp->size - 1)), 16);
 				ft_putstr(str_tmp);
 				free(str_tmp);
 				ft_putstr(" : ");
