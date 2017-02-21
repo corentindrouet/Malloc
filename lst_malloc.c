@@ -6,7 +6,7 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/16 09:19:33 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/21 09:08:25 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/21 10:07:54 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ static void			check_struct_page_size(t_allocated *lst)
 	{
 		lst->next = mmap(0, getpagesize(), PROT_READ | PROT_WRITE,
 				MAP_ANON | MAP_PRIVATE, -1, 0);
+        if (errno)
+            return ;
 		lst->next->struct_page_total_size = STRUCT_SIZE;
 	}
 	else
@@ -81,10 +83,13 @@ t_allocated			*struct_manager(t_allocated **lst, size_t size,
 {
 	t_allocated	*tmp;
 
+    errno = 0;
 	tmp = *lst;
 	if (!tmp)
 	{
 		*lst = init_lst(size, map_max_size);
+        if (errno)
+            return (NULL);
 		return (*lst);
 	}
 	while (tmp->next && (!tmp->free || tmp->size < size))
@@ -92,6 +97,8 @@ t_allocated			*struct_manager(t_allocated **lst, size_t size,
 	if (check_for_free(tmp, size, is_large))
 		return (tmp);
 	check_struct_page_size(tmp);
+    if (errno)
+        return (NULL);
 	tmp->next->previous = tmp;
 	tmp = tmp->next;
 	tmp->size = size;
@@ -101,5 +108,7 @@ t_allocated			*struct_manager(t_allocated **lst, size_t size,
 		tmp->struct_page_total_size =
 			tmp->previous->struct_page_total_size + STRUCT_SIZE;
 	tmp->alloc = memory_address(tmp, map_max_size, is_large);
+    if (errno)
+        return (NULL);
 	return (tmp);
 }

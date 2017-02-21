@@ -6,7 +6,7 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/14 13:13:44 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/21 09:57:59 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/21 10:02:24 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static void	page_header(int index, t_allocated *tmp)
 	if (tmp)
 	{
 		ltoa_str = ft_ltoa_base((long)tmp->alloc, 16);
+		ft_putstr("0x");
 		ft_putendl(ltoa_str);
 		free(ltoa_str);
 	}
@@ -37,10 +38,12 @@ static void	print_alloc_infos(t_allocated *tmp)
 	char	*ltoa_str;
 
 	ltoa_str = ft_ltoa_base((long)tmp->alloc, 16);
+	ft_putstr("0x");
 	ft_putstr(ltoa_str);
 	free(ltoa_str);
 	ft_putstr(" - ");
 	ltoa_str = ft_ltoa_base((long)(tmp->alloc + tmp->size - 1), 16);
+	ft_putstr("0x");
 	ft_putstr(ltoa_str);
 	free(ltoa_str);
 	ft_putstr(" : ");
