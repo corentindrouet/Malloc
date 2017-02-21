@@ -6,7 +6,7 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/14 13:13:44 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/21 09:55:23 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/21 09:57:59 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,17 @@ static void	page_header(int index, t_allocated *tmp)
 {
 	char	*ltoa_str;
 
-	if (i == 0)
+	if (index == 0)
 		ft_putstr("TINY: ");
-	else if (i == 1)
+	else if (index == 1)
 		ft_putstr("SMALL : ");
 	else
 		ft_putstr("LARGE : ");
 	if (tmp)
 	{
-		str_tmp = ft_ltoa_base((long)tmp->alloc, 16);
-		ft_putendl(str_tmp);
-		free(str_tmp);
+		ltoa_str = ft_ltoa_base((long)tmp->alloc, 16);
+		ft_putendl(ltoa_str);
+		free(ltoa_str);
 	}
 	else
 		ft_putchar('\n');
@@ -54,7 +54,6 @@ void		show_alloc_mem(void)
 	t_allocated	*tmp;
 	void		*all_alloc;
 	int			i;
-	char		*str_tmp;
 
 	all_alloc = &g_all_alloc;
 	i = 0;
