@@ -6,11 +6,12 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/09 13:41:24 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/21 09:07:41 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/21 14:19:33 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
+#include <stdio.h>
 
 static void			*tiny_function(size_t size)
 {
