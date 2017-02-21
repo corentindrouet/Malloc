@@ -6,12 +6,11 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/13 12:30:48 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/16 15:47:22 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/21 09:06:51 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "memfunctions.h"
-#include <unistd.h>
+#include "malloc.h"
 
 static void	*enough_space(t_allocated *ptr, size_t size)
 {

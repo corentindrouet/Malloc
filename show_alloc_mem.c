@@ -6,18 +6,18 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/14 13:13:44 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/16 15:49:34 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/21 09:09:08 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "memfunctions.h"
+#include "malloc.h"
 
 void	show_alloc_mem(void)
 {
 	t_allocated	*tmp;
 	void		*all_alloc;
 	int			i;
-    char        *str_tmp;
+	char		*str_tmp;
 
 	all_alloc = &g_all_alloc;
 	i = 0;
@@ -30,30 +30,30 @@ void	show_alloc_mem(void)
 			ft_putstr("SMALL : ");
 		else
 			ft_putstr("LARGE : ");
-        if (tmp)
-        {
-            str_tmp = ft_ltoa_base((long)tmp->alloc, 16);
-            ft_putendl(str_tmp);
-            free(str_tmp);
-        }
-        else
-            ft_putchar('\n');
+		if (tmp)
+		{
+			str_tmp = ft_ltoa_base((long)tmp->alloc, 16);
+			ft_putendl(str_tmp);
+			free(str_tmp);
+		}
+		else
+			ft_putchar('\n');
 		while (tmp)
 		{
-            if (!tmp->free)
-            {
-                str_tmp = ft_ltoa_base((long)tmp->alloc, 16);
-                ft_putstr(str_tmp);
-                free(str_tmp);
-                ft_putstr(" - ");
-                str_tmp = ft_ltoa_base((long)(tmp->alloc + tmp->size), 16);
-                ft_putstr(str_tmp);
-                free(str_tmp);
-                ft_putstr(" : ");
-                ft_putnbr(tmp->size);
-                ft_putstr(" octets");
-                ft_putchar('\n');
-            }
+			if (!tmp->free)
+			{
+				str_tmp = ft_ltoa_base((long)tmp->alloc, 16);
+				ft_putstr(str_tmp);
+				free(str_tmp);
+				ft_putstr(" - ");
+				str_tmp = ft_ltoa_base((long)(tmp->alloc + tmp->size), 16);
+				ft_putstr(str_tmp);
+				free(str_tmp);
+				ft_putstr(" : ");
+				ft_putnbr(tmp->size);
+				ft_putstr(" octets");
+				ft_putchar('\n');
+			}
 			tmp = tmp->next;
 		}
 		i++;

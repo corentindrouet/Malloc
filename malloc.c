@@ -6,11 +6,11 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/09 13:41:24 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/16 15:08:43 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/21 09:07:41 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "memfunctions.h"
+#include "malloc.h"
 
 static void			*tiny_function(size_t size)
 {
@@ -24,7 +24,8 @@ static void			*small_function(size_t size)
 {
 	t_allocated		*tmp;
 
-	tmp = struct_manager(&(g_all_alloc.small_lst), size, getpagesize() * 100, 0);
+	tmp = struct_manager(&(g_all_alloc.small_lst),
+			size, getpagesize() * 100, 0);
 	return (tmp->alloc);
 }
 

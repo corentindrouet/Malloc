@@ -6,11 +6,11 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/16 09:19:33 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/16 15:06:45 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/21 09:08:25 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "memfunctions.h"
+#include "malloc.h"
 
 static t_allocated	*init_lst(size_t size, size_t map_max_size)
 {
@@ -32,7 +32,8 @@ static t_allocated	*init_lst(size_t size, size_t map_max_size)
 static void			*memory_address(t_allocated *lst, size_t map_max_size,
 		short is_large)
 {
-	if (is_large || ((lst->previous->page_total_size + lst->size) > map_max_size))
+	if (is_large
+			|| ((lst->previous->page_total_size + lst->size) > map_max_size))
 	{
 		lst->page_total_size = lst->size;
 		return (mmap(0, map_max_size, PROT_READ | PROT_WRITE,

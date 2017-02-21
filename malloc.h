@@ -6,12 +6,12 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/09 08:54:53 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/16 15:49:51 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/21 09:08:05 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MEMFUNCTIONS_H
-# define MEMFUNCTIONS_H
+#ifndef MALLOC_H
+# define MALLOC_H
 # include <sys/mman.h>
 # include <unistd.h>
 # include <sys/resource.h>

@@ -6,11 +6,11 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/13 09:26:22 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/16 15:06:30 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/21 09:06:16 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "memfunctions.h"
+#include "malloc.h"
 
 t_allocated			*search_ptr_lst(t_allocated *lst, void *ptr)
 {
