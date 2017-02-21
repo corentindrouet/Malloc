@@ -6,7 +6,7 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/13 09:26:22 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/21 14:19:30 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/21 14:40:50 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static void			defrag(t_allocated **lst, t_allocated *maillon)
 	if (!maillon->free)
 		nb_not_free++;
 	maillon = maillon->next;
-	while (!nb_not_free && maillon->next
+	while (!nb_not_free && maillon
 			&& maillon->page_total_size != maillon->size)
 	{
 		if (!maillon->free)
@@ -39,7 +39,10 @@ static void			defrag(t_allocated **lst, t_allocated *maillon)
 		if (tmp == *lst)
 		{
 			if (tmp->size > SMALL)
+			{
 				munmap((void*)tmp->alloc, tmp->size);
+				tmp->alloc = NULL;
+			}
 			else
 				munmap((void*)tmp->alloc, ((tmp->size <= TINY) ? TINY : SMALL));
 			*lst = next_maillon;
@@ -53,7 +56,10 @@ static void			defrag(t_allocated **lst, t_allocated *maillon)
 			if (next_maillon)
 				next_maillon->previous = maillon;
 			if (tmp->size > SMALL)
+			{
 				munmap((void*)tmp->alloc, tmp->size);
+				tmp->alloc = NULL;
+			}
 			else
 				munmap((void*)tmp->alloc, ((tmp->size <= TINY) ? TINY : SMALL));
 		}
@@ -92,13 +98,13 @@ void				free(void *ptr)
 	{
 		tmp = *((t_allocated**)(struct_alloc + (sizeof(t_allocated*) * inc)));
 		tmp = search_ptr_lst(tmp, ptr);
-		if (inc == 2 && tmp)
-		{
-			munmap(tmp->alloc, tmp->size);
-			tmp->alloc = NULL;
-			tmp->free = 1;
-		}
-		else if (tmp)
+//		if (inc == 2 && tmp)
+//		{
+//			munmap(tmp->alloc, tmp->size);
+//			tmp->alloc = NULL;
+//			tmp->free = 1;
+//		}
+		if (tmp)
 		{
 			tmp->free = 1;
 			defrag(((t_allocated**)(struct_alloc + (sizeof(t_allocated*) * inc))), tmp);

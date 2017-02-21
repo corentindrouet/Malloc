@@ -6,7 +6,7 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/14 13:13:44 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/21 14:32:57 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/21 14:35:00 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ void		show_alloc_mem(void)
 		page_header(i, tmp);
 		while (tmp)
 		{
-            if (tmp->page_total_size == tmp->size)
-                ft_putstr("  NEW PAGE\n");
+			if (tmp->page_total_size == tmp->size)
+				ft_putstr("  NEW PAGE\n");
 			if (!tmp->free)
 				print_alloc_infos(tmp);
 			tmp = tmp->next;
