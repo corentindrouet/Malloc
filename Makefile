@@ -6,7 +6,7 @@
 #    By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/01/24 08:17:02 by cdrouet           #+#    #+#              #
-#    Updated: 2017/02/16 13:12:24 by cdrouet          ###   ########.fr        #
+#    Updated: 2017/02/21 10:46:15 by cdrouet          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,11 +33,12 @@ OBJ= $(addprefix $(OBJ_PATH), $(OBJ_NAME))
 LIB= $(addprefix $(LIBFT_INC), $(LIBFT_NAME))
 
 .PHONY: all
-all: $(NAME)
 
 $(NAME): $(LIB) $(OBJ)
 	gcc -shared -o $(NAME) $(OBJ) -L$(LIBFT_INC) -lftprintf
 	ln -f -s $(NAME) libft_malloc.so
+
+all: $(NAME)
 
 $(LIB):
 	make -C $(LIBFT_INC)
