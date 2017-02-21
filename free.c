@@ -6,17 +6,42 @@
 /*   By: cdrouet <cdrouet@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/13 09:26:22 by cdrouet           #+#    #+#             */
-/*   Updated: 2017/02/21 14:40:50 by cdrouet          ###   ########.fr       */
+/*   Updated: 2017/02/21 15:08:43 by cdrouet          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 #include <stdio.h>
 
+static void			delete_element(t_allocated **lst, t_allocated *elem,
+		t_allocated *start)
+{
+	t_allocated	*next_maillon;
+
+	next_maillon = elem;
+	elem = start->previous;
+	if (start == *lst)
+		*lst = next_maillon;
+	else
+		elem->next = next_maillon;
+	if (next_maillon)
+		next_maillon->previous = elem;
+}
+
+static void			delete_map(t_allocated *tmp)
+{
+	if (tmp->size > SMALL)
+	{
+		munmap((void*)tmp->alloc, tmp->size);
+		tmp->alloc = NULL;
+	}
+	else
+		munmap((void*)tmp->alloc, ((tmp->size <= TINY) ? TINY : SMALL));
+}
+
 static void			defrag(t_allocated **lst, t_allocated *maillon)
 {
 	t_allocated	*tmp;
-	t_allocated	*next_maillon;
 	int			nb_not_free;
 
 	while (maillon->previous && maillon->page_total_size != maillon->size)
@@ -33,36 +58,10 @@ static void			defrag(t_allocated **lst, t_allocated *maillon)
 			nb_not_free++;
 		maillon = maillon->next;
 	}
-	next_maillon = maillon;
 	if (!nb_not_free)
 	{
-		if (tmp == *lst)
-		{
-			if (tmp->size > SMALL)
-			{
-				munmap((void*)tmp->alloc, tmp->size);
-				tmp->alloc = NULL;
-			}
-			else
-				munmap((void*)tmp->alloc, ((tmp->size <= TINY) ? TINY : SMALL));
-			*lst = next_maillon;
-			if (next_maillon)
-				next_maillon->previous = NULL;
-		}
-		else
-		{
-			maillon = tmp->previous;
-			maillon->next = next_maillon;
-			if (next_maillon)
-				next_maillon->previous = maillon;
-			if (tmp->size > SMALL)
-			{
-				munmap((void*)tmp->alloc, tmp->size);
-				tmp->alloc = NULL;
-			}
-			else
-				munmap((void*)tmp->alloc, ((tmp->size <= TINY) ? TINY : SMALL));
-		}
+		delete_element(lst, maillon, tmp);
+		delete_map(tmp);
 	}
 }
 
@@ -87,6 +86,7 @@ t_allocated			*search_ptr_lst(t_allocated *lst, void *ptr)
 void				free(void *ptr)
 {
 	t_allocated	*tmp;
+	t_allocated	**lst;
 	int			inc;
 	void		*struct_alloc;
 
@@ -96,18 +96,13 @@ void				free(void *ptr)
 	inc = 0;
 	while (inc < 3)
 	{
-		tmp = *((t_allocated**)(struct_alloc + (sizeof(t_allocated*) * inc)));
+		lst = ((t_allocated**)(struct_alloc + (sizeof(t_allocated*) * inc)));
+		tmp = *lst;
 		tmp = search_ptr_lst(tmp, ptr);
-//		if (inc == 2 && tmp)
-//		{
-//			munmap(tmp->alloc, tmp->size);
-//			tmp->alloc = NULL;
-//			tmp->free = 1;
-//		}
 		if (tmp)
 		{
 			tmp->free = 1;
-			defrag(((t_allocated**)(struct_alloc + (sizeof(t_allocated*) * inc))), tmp);
+			defrag(lst, tmp);
 			break ;
 		}
 		inc++;
